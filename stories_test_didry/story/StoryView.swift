@@ -11,9 +11,11 @@ struct StoryView: View {
 
     let username: String
 
-    let url: String
+    var story: Story
 
     var dismiss: () -> Void
+
+    var updateStoryLikeStatus: (Bool) -> Void
 
     @State var progress: CGFloat = 0
 
@@ -26,13 +28,12 @@ struct StoryView: View {
             withAnimation {
                 progress += 3
             }
-
         }
     }
 
     var body: some View {
         VStack {
-            AsyncImage(url: URL(string: url)!) { content in
+            AsyncImage(url: URL(string: story.pictureUrl)!) { content in
                 content
                     .resizable()
                     .frame(width: 300, height: 200)
@@ -70,6 +71,18 @@ struct StoryView: View {
                 Text(username)
             }
             .padding()
+        })
+        .overlay(alignment: .bottomLeading, content: {
+
+            Image(systemName: story.isLiked ?? false ? "heart.fill" : "heart")
+                .onTapGesture {
+                    print("ici")
+                    updateStoryLikeStatus(true)
+                    
+                }
+                .padding()
+
+
         })
         .transition(
             AsymmetricTransition(

@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  FeedView.swift
 //  stories_test_didry
 //
 //  Created by Gatien DIDRY on 15/05/2025.
@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct FeedView: View {
 
-    @ObservedObject var viewModel: ContentViewModel = ContentViewModel()
+    @ObservedObject var viewModel: FeedViewModel = FeedViewModel()
 
     var body: some View {
         ZStack {
@@ -36,9 +36,7 @@ struct ContentView: View {
                                         ProgressView()
                                             .frame(width: 100)
                                     }
-
                                 }
-
                                 Text(user.name)
                                     .font(.system(size: 10))
                             }
@@ -48,7 +46,6 @@ struct ContentView: View {
                 .scrollIndicators(.hidden)
 
                 Spacer()
-
             }
 
             if viewModel.isStoriesFeedPresented,
@@ -56,8 +53,9 @@ struct ContentView: View {
                 let userStoryDisplayed = viewModel.userStoryDisplayed {
                 StoryView(
                     username: userStoryDisplayed.name,
-                    url: storyPresented.pictureUrl,
-                    dismiss: viewModel.dismissStoryFeed
+                    story: storyPresented,
+                    dismiss: viewModel.dismissStoryFeed,
+                    updateStoryLikeStatus: viewModel.updateLikeStatus
                 )
             }
         }
@@ -70,7 +68,7 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    FeedView()
 }
 
 

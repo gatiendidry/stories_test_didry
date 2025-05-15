@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-final class ContentViewModel: ObservableObject {
+final class FeedViewModel: ObservableObject {
 
     private let networkService: NetworkService = NetworkService()
 
@@ -21,7 +21,6 @@ final class ContentViewModel: ObservableObject {
     var userStoryDisplayed: User?
 
     private var cancellables = Set<AnyCancellable>()
-
 
     func fetchInitialsData() {
         fetchUsers()
@@ -76,6 +75,12 @@ final class ContentViewModel: ObservableObject {
 
     func dismissStoryFeed() {
         isStoriesFeedPresented = false
+    }
+
+    func updateLikeStatus(likeStatus: Bool) {
+        if let storyDisplayed {
+            stories[storyDisplayed.id].isLiked = likeStatus
+        }
     }
 
 }

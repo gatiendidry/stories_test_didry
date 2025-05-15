@@ -12,4 +12,5 @@ struct Story: Decodable {
     let userId: Int
     let pictureUrl: String
     //let date: Date
+    var isLiked: Bool? = false
 }
