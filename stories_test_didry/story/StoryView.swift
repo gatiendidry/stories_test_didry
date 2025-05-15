@@ -76,13 +76,10 @@ struct StoryView: View {
 
             Image(systemName: story.isLiked ?? false ? "heart.fill" : "heart")
                 .onTapGesture {
-                    print("ici")
                     updateStoryLikeStatus(true)
                     
                 }
                 .padding()
-
-
         })
         .transition(
             AsymmetricTransition(
