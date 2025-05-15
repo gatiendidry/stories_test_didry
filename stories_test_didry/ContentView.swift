@@ -12,44 +12,56 @@ struct ContentView: View {
     @ObservedObject var viewModel: ContentViewModel = ContentViewModel()
 
     var body: some View {
-        VStack {
-            ScrollView(.horizontal) {
-                HStack {
-                    ForEach(viewModel.users, id: \.id) { user in
-                        VStack {
-                            if let url = URL(string: user.profilePictureUrl) {
+        ZStack {
+            VStack {
+                ScrollView(.horizontal) {
+                    HStack {
+                        ForEach(viewModel.users, id: \.id) { user in
+                            VStack {
+                                if let url = URL(string: user.profilePictureUrl) {
 
-                                AsyncImage(url: url) { content in
-                                    content
-                                        .resizable()
-                                        .frame(width: 90, height: 90)
-                                        .clipShape(Circle())
-                                        .overlay {
-
-                                            if  !viewModel.getStoryIfExist(user: user).isEmpty {
-                                                Circle()
-                                                    .stroke(Color.blue, lineWidth: 4)
+                                    AsyncImage(url: url) { content in
+                                        content
+                                            .resizable()
+                                            .frame(width: 90, height: 90)
+                                            .clipShape(Circle())
+                                            .onTapGesture{ viewModel.presentStory(user: user)}
+                                            .overlay {
+                                                if  !viewModel.getStoryIfExist(user: user).isEmpty {
+                                                    Circle()
+                                                        .stroke(Color.blue, lineWidth: 4)
+                                                }
                                             }
+                                    } placeholder: {
+                                        ProgressView()
+                                            .frame(width: 100)
+                                    }
 
-
-
-                                        }
-                                } placeholder: {
-                                    ProgressView()
-                                        .frame(width: 100)
                                 }
-                            }
 
-                            Text(user.name)
-                                .font(.system(size: 10))
+                                Text(user.name)
+                                    .font(.system(size: 10))
+                            }
                         }
                     }
                 }
-            }
-            .scrollIndicators(.hidden)
+                .scrollIndicators(.hidden)
 
-            Spacer()
+                Spacer()
+
+            }
+
+            if viewModel.isStoriesFeedPresented,
+               let storyPresented = viewModel.storyDisplayed,
+                let userStoryDisplayed = viewModel.userStoryDisplayed {
+                StoryView(
+                    username: userStoryDisplayed.name,
+                    url: storyPresented.pictureUrl,
+                    dismiss: viewModel.dismissStoryFeed
+                )
+            }
         }
+        .sensoryFeedback(.impact, trigger: viewModel.isStoriesFeedPresented)
         .onAppear {
             viewModel.fetchInitialsData()
         }
@@ -60,3 +72,5 @@ struct ContentView: View {
 #Preview {
     ContentView()
 }
+
+

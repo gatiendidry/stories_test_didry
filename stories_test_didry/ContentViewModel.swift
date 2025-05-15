@@ -16,6 +16,10 @@ final class ContentViewModel: ObservableObject {
 
     @Published var stories: [Story] = []
 
+    @Published var isStoriesFeedPresented: Bool = false
+    var storyDisplayed: Story?
+    var userStoryDisplayed: User?
+
     private var cancellables = Set<AnyCancellable>()
 
 
@@ -62,6 +66,16 @@ final class ContentViewModel: ObservableObject {
 
     func getStoryIfExist(user: User) -> [Story] {
         return self.stories.filter { $0.userId == user.id }
+    }
+
+    func presentStory(user: User) {
+        isStoriesFeedPresented = true
+        storyDisplayed = stories.filter {$0.userId == user.id }.first
+        userStoryDisplayed = user
+    }
+
+    func dismissStoryFeed() {
+        isStoriesFeedPresented = false
     }
 
 }
