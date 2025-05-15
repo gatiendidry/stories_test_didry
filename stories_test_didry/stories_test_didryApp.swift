@@ -12,6 +12,7 @@ struct stories_test_didryApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .background(.black)
         }
     }
 }

@@ -8,14 +8,42 @@
 import SwiftUI
 
 struct ContentView: View {
+
+    @ObservedObject var viewModel: ContentViewModel = ContentViewModel()
+
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            ScrollView(.horizontal) {
+                HStack {
+                    ForEach(viewModel.users, id: \.id) { user in
+                        VStack {
+                            if let url = URL(string: user.profilePictureUrl) {
+
+                                AsyncImage(url: url) { content in
+                                    content
+                                        .resizable()
+                                        .frame(width: 90, height: 90)
+                                        .clipShape(Circle())
+                                } placeholder: {
+                                    ProgressView()
+                                        .frame(width: 100)
+                                }
+                            }
+
+                            Text(user.name)
+                                .font(.system(size: 10))
+                        }
+
+                    }
+                }
+            }
+            .scrollIndicators(.hidden)
+            Spacer()
         }
-        .padding()
+        .onAppear {
+            viewModel.fetchUsers()
+        }
+
     }
 }
 
