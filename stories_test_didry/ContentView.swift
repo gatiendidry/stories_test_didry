@@ -24,6 +24,16 @@ struct ContentView: View {
                                         .resizable()
                                         .frame(width: 90, height: 90)
                                         .clipShape(Circle())
+                                        .overlay {
+
+                                            if  !viewModel.getStoryIfExist(user: user).isEmpty {
+                                                Circle()
+                                                    .stroke(Color.blue, lineWidth: 4)
+                                            }
+
+
+
+                                        }
                                 } placeholder: {
                                     ProgressView()
                                         .frame(width: 100)
@@ -33,15 +43,15 @@ struct ContentView: View {
                             Text(user.name)
                                 .font(.system(size: 10))
                         }
-
                     }
                 }
             }
             .scrollIndicators(.hidden)
+
             Spacer()
         }
         .onAppear {
-            viewModel.fetchUsers()
+            viewModel.fetchInitialsData()
         }
 
     }

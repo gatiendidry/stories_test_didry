@@ -26,5 +26,15 @@ class NetworkService {
            .decode(type: UsersPages.self, decoder: jsonDecoder)
    }
 
+    func fetchUsersStories() -> some Publisher<[Story], Error> {
+        let url = Bundle.main.url(forResource: "stories_datasource", withExtension: "json")!
+
+        return URLSession
+            .shared
+            .dataTaskPublisher(for: url)
+            .map(\.data)
+            .decode(type: [Story].self, decoder: jsonDecoder)
+    }
+
 
 }
